@@ -6,7 +6,7 @@
 	
 	$handler->render([
 		'tag'   => 'home',
-		'title' => 'Blank project',
+		'title' => 'main',
 		'user'  => $handler->user->data
 	]);
 	

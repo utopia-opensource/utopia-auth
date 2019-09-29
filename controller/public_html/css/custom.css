@@ -14,6 +14,10 @@ h1, h2, h3, h4 {
 	cursor: default;
 }
 
+center {
+	width: 100%;
+}
+
 footer {
 	padding: 1rem;
 	color: #eceeec;
@@ -124,4 +128,9 @@ footer {
 	position: relative;
     bottom: 2px;
 	margin-right: 10px;
+}
+
+.form-small {
+	width: 100%;
+	max-width: 320px;
 }

@@ -6,10 +6,34 @@
 		<div class="white-wrap">
 			{% include 'parts/main/promo.tmpl' %}
 			<div class="container pb-4">
-				<div class="row">
-          <p>content</p>
+				{% if page.user.is_auth == false %}
+        <div class="row" id="not-authorized">
+          <h4 class="w-100 text-center pb-2">Try authorization</h4>
+          <center>
+            {% include 'parts/auth_form.tmpl' %}
+          </center>
 				</div>
+        <hr/>
+         <h4 class="w-100 text-center pt-3 pb-2">How it works</h4>
+         <ul>
+          <ol>1. You are requesting authorization by pubkey;</ol>
+          <ol>2. The script generates a random key and sends it to you by uMail, "seed" value is placed in the session;</ol>
+          <ol>3. You follow the link from uMail and confirm authorization.</ol>
+          <ol>4. The script checks the authorization key in its database and in the request, checks the "seed" value for the client.</ol>
+         </ul>
+         <div class="w-100 text-center">
+          <img src="/img/screen1.png"/><br/>
+          <a href="https://github.com/Sagleft/utopia-auth" class="btn btn-secondary mt-3" rel="nofollow" target="_blank">View on Github</a>
+         </div>
 			</div>
+      {% else %}
+        <div class="row" id="authorized">
+          <h4 class="w-100 text-center pb-2">You are authorized!</h4>
+          <center>
+            <p>image not available (coming soon)</p>
+          </center>
+        </div>
+      {% endif %}
 		</div>
 		{% include 'parts/footer.tmpl' %}
 	</body>

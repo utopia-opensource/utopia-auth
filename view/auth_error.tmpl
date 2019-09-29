@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	{% include 'parts/head.tmpl' %}
+	<body>
+		{% include 'parts/navbar.tmpl' %}
+		<div class="white-wrap">
+			{% include 'parts/main/promo.tmpl' %}
+			<div class="container pb-4">
+				<div class="row">
+          <h4 class="w-100 text-center pb-2">Authorization Failed</h4>
+          <center>
+            {% if page.error != '' %}
+              <p>{{ page.error }}</p>
+            {% else %}
+              <p>There is no information for this error</p>
+            {% endif %}
+            <hr/>
+            <h5>try again?</h5>
+            {% include 'parts/auth_form.tmpl' %}
+          </center>
+				</div>
+			</div>
+		</div>
+		{% include 'parts/footer.tmpl' %}
+	</body>
+</html>

@@ -12,6 +12,7 @@ ErrorDocument 500 /error/500
 #RewriteCond %{HTTP:X-HTTPS} !1
 #RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 RewriteRule ^error/(.*)/?$ error.php?code=$1 [L,QSA]
+RewriteRule ^check/(.*)/?$ check.php?code=$1 [L,QSA]
 
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}\.php -f
