@@ -1,10 +1,51 @@
+a:hover {
+	text-decoration: none;
+}
+
+a.disabled {
+	color: #3c3c3c;
+}
+
+nav.navbar {
+	background-color: black;
+}
+
+h1, h2, h3, h4 {
+	cursor: default;
+}
+
 footer {
 	padding: 1rem;
 	color: #eceeec;
 }
 
 .white-wrap {
-	background-color: white;
+	padding-top: 4rem;
+	background-color: #1a1a1a;
+}
+
+.text-highlited {
+	color: #39db7f;
+}
+
+.text-highlited:hover {
+	color: #0cff37;
+}
+
+.table-general {
+	border-bottom: 3px solid #39db7f;
+    border-top: 3px solid #39db7f;
+    border-spacing: 4px;
+	color: white;
+}
+
+.table-general tr, .table-general th {
+	background-color: #202020;
+	border-spacing: 3px;
+}
+
+.table-general tr:hover {
+	background-color: #2d2d2d;
 }
 
 .dropdown-menu {
@@ -23,4 +64,64 @@ footer {
 
 .nav-tabs > li {
 	display: inline-block;
+}
+
+.navbar-nav .nav-item {
+	padding-left: 1rem;
+	background-color: #1a1a1a;
+}
+
+.search-form {
+	width: 100%;
+	position: relative;
+}
+
+.search-wrap {
+	padding-right: 40px;
+}
+
+.search-panel, .search-panel:hover {
+	background-color: #16181b;
+}
+
+.search-panel {
+	border: 0;
+    border-radius: 0;
+	text-align: center;
+	color: white!important;
+}
+
+.search-btn {
+	position: absolute;
+	top: 0;
+	right: 0;
+    border-radius: 0;
+}
+
+.row-flex, .row-flex > div[class*='col-'] { 
+	display: -webkit-flex;
+	display: -webkit-box;
+	display: -moz-flex;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -ms-flex;
+	display: -o-flex;
+	display: flex;
+	flex: 1 1 auto;
+}
+
+.row-flex-wrap {
+	-webkit-flex-flow: row wrap;
+	align-content: flex-start;
+	flex:0;
+}
+
+.row-flex > div[class*='col-'] {
+	margin:-.2px; 
+}
+
+.tridcode {
+	position: relative;
+    bottom: 2px;
+	margin-right: 10px;
 }
