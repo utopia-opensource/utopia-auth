@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	{% include 'parts/head.tmpl' %}
+	<body>
+		{% include 'parts/navbar.tmpl' %}
+		<div class="white-wrap">
+			{% include 'parts/main/promo.tmpl' %}
+			<div class="container pb-4">
+				<div class="row">
+          <h4 class="w-100 text-center pb-2">Request created</h4>
+          {% if page.error != '' %}
+            <h5 class="w-100 text-center text-highlited">{{ page.error }}</h5>
+          {% endif %}
+          <center>
+            <p>It looks like you are logging in for the first time. A request has been sent to you. Open your Utopia client and accept the authorization request.</p>
+            <p>Do not close the Idyll browser until you complete authorization. As soon as you accept the request, click on the button:</p>
+            <div class="form-small">
+              <a href="/request_check" class="btn btn-primary w-100">CHECK</a>
+            </div>
+          </center>
+				</div>
+			</div>
+		</div>
+		{% include 'parts/footer.tmpl' %}
+	</body>
+</html>

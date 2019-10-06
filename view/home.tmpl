@@ -21,6 +21,8 @@
           <ol>3. You follow the link from uMail and confirm authorization.</ol>
           <ol>4. The script checks the authorization key in its database and in the request, checks the "seed" value for the client.</ol>
          </ul>
+         <br/>
+         <p><b>Notice!</b> Do not close the idyll browser during authorization, otherwise the authorization session may be cleared. Simply put, you must create an authorization request and confirm it without closing the browser.</p>
          <div class="w-100 text-center">
           <img src="/img/screen1.png"/><br/>
           <a href="https://github.com/Sagleft/utopia-auth" class="btn btn-secondary mt-3" rel="nofollow" target="_blank">View on Github</a>
@@ -30,7 +32,7 @@
         <div class="row" id="authorized">
           <h4 class="w-100 text-center pb-2">You are authorized!</h4>
           <center>
-            <p>image not available (coming soon)</p>
+            <p><img src="https://www.tinygraphs.com/spaceinvaders/{{ page.user.pubkey }}?theme=frogideas&numcolors=4&size=128"/></p>
           </center>
         </div>
       {% endif %}

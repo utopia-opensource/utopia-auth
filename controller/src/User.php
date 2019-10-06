@@ -20,7 +20,7 @@
 		}
 		
 		public function reloadData() {
-			$this->data['is_auth'] = $_SESSION['pubkey'];
+			$this->data['is_auth'] = isset($_SESSION['pubkey']);
 			if($this->data['is_auth']) {
 				$this->data['pubkey'] = $_SESSION['pubkey'];
 				$this->data['hash']   = md5($_SESSION['pubkey']);

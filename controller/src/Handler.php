@@ -6,6 +6,7 @@
 		public $user       = null;
 		public $renderT    = null;
 		public $last_error = "";
+		public $last_code  = 100; //inherit from UtopiaClient->status_code
 		
 		private $db      = null;
 		private $enviro  = null;
@@ -32,8 +33,10 @@
 			$this->client = new \App\Model\UtopiaClient();
 		}
 		
-		public function auth_request(): bool {
-			$pubkey = \App\Model\Utilities::data_filter($_POST['pubkey']);
+		public function auth_request($pubkey = ""): bool {
+			if($pubkey == "") {
+				$pubkey = \App\Model\Utilities::data_filter($_POST['pubkey']);
+			}
 			if($pubkey == "") {
 				$this->last_error = "empty pubkey given";
 				return false;
@@ -42,7 +45,6 @@
 				$this->last_error = "pubkey must be 64 characters long";
 				return false;
 			}
-			//TODO: check is HEX
 			
 			//create auth key & seed
 			$auth_code = \App\Model\Utilities::generateCode(16);
@@ -72,10 +74,127 @@
 			
 			$result = $this->client->sendEmailMessage($pubkey, $subject, $message);
 			if(!$result) {
-				$this->last_error = "failed to send uMail";
+				$client_code = $this->client->status_code;
+				switch($client_code) {
+					case 700:
+						//we pass the code that the authorization request has been sent
+						$_SESSION['wait_pubkey'] = $pubkey;
+						$this->last_code = $client_code;
+						break;
+					case 100:
+						//regular code. just handle the error
+						$this->last_error = "failed to send uMail. status " . $client_code;
+						if($this->client->last_error != "") {
+							$this->last_error .= ": " . $this->client->last_error;
+						}
+						break;
+				}
 				return false;
 			}
 			return true;
+		}
+		
+		public function get_whois($pubkey = "") {
+			return $this->client->whois($pubkey);
+		}
+		
+		public function parse_whois($whois_info = []) {
+			if(!isset($whois_info['general'])) {
+				$this->last_error = "Failed to determine public key ownership";
+				return [];
+			}
+			$general = $whois_info['general'];
+			
+			$is_known = false;
+			for($i = 0; $i < count($general); $i++) {
+				$line = $general[$i];
+				if($line['name'] == "You have this Public Key in your contact list") {
+					if($line['value'] == "Yes") {
+						$is_known = true;
+					} else {
+						$is_known = false;
+					}
+					break;
+				}
+			}
+			
+			$result = $whois_info;
+			$result['pubkey_known'] = $is_known;
+			return $result;
+		}
+		
+		//not working ???
+		public function isPubkeyKnown($pubkey = ""): bool {
+			$whois_info = $this->get_whois();
+			if(!isset($whois_info['general'])) {
+				$this->last_error = "Failed to determine public key ownership";
+				return false;
+			}
+			//check if this public key is added to us as a contact
+			$whois_general = $whois_info['general'];
+			$pubkey_isContact = false;
+			for($i=0; $i < count($whois_general); $i++) {
+				$entry = $whois_general[$i];
+				if($entry['name'] == "You have this Public Key in your contact list") {
+					$pubkey_isContact = true;
+					break;
+				}
+			}
+			if(!$pubkey_isContact) {
+				$this->last_error = "You have not yet confirmed the authorization request (pubkey not known)";
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
+		public function auth_first($pubkey = ""): bool {
+			//recreate client //fix
+			$this->utopia_unit();
+			//send a request for permission to include the user in our contact list
+			$status_success = $this->client->sendAuthorizationRequest($pubkey);
+			
+			if(!$status_success) {
+				$this->last_error = $this->client->last_error;
+			} else {
+				$_SESSION['wait_pubkey'] = $pubkey;
+			}
+			
+			return $status_success;
+		}
+		
+		public function auth_wait($pubkey = "", $pubkey_unknown = false): bool {
+			if($pubkey == "") {
+				if(!isset($_SESSION['wait_pubkey'])) {
+					$this->last_error = "There is currently no authorization request pending confirmation.";
+					return false;
+				}
+				$pubkey = $_SESSION['wait_pubkey'];
+			}
+			
+			if(strlen($pubkey) != 64) {
+				$this->last_error = "Invalid or empty pubkey in session";
+				return false;
+			}
+			//check if this public key is added to us as a contact
+			/* if(!$pubkey_unknown) {
+				$pubkey_isContact = $this->isPubkeyKnown($pubkey);
+				if(!$pubkey_isContact) {
+					return false;
+				}
+			} */
+			if(!$pubkey_unknown) {
+				$whois_info = $this->get_whois($pubkey);
+				$parsed = $this->parse_whois($whois_info);
+				$pubkeyKnown = $parsed['pubkey_known'];
+			}
+			
+			if(!$pubkeyKnown) {
+				return false;
+			}
+			//pubkey is authorized, go ahead
+			$status_success = $this->auth_request($pubkey);
+			return $status_success;
 		}
 		
 		public function auth_check(): bool {
