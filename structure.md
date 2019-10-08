@@ -1,5 +1,5 @@
-## Структура проекта
+## Project structure
 
-* model - скрипты для фильтрации, для работы с данными;
-* view - представления, верстка (twig-шаблоны), кеш шаблонов;
-* controller - обработка запросов пользователя и вывод представлений (передача данных в view), основная логика;
+* model - scripts for filtering, for working with data;
+* view - views, layout (twig-templates), template cache;
+* controller - processing user requests and displaying views (transferring data to view), the main logic;
